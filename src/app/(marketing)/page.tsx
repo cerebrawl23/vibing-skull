@@ -1,0 +1,222 @@
+import Link from 'next/link'
+import { ArrowRight, Code, Palette, MessageSquare, Rocket, Newspaper, Workflow, Star } from 'lucide-react'
+import { createClient } from '@/lib/supabase/server'
+import { Button } from '@/components/ui/button'
+import { Card, CardDescription, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { PricingBadge } from '@/components/tools/pricing-badge'
+
+const categories = [
+  {
+    title: 'AI Code Assistants',
+    description: 'Cursor, Copilot, Claude Code, Windsurf, and more',
+    icon: Code,
+    href: '/tools?category=ai-code-assistants',
+  },
+  {
+    title: 'AI Design & UI',
+    description: 'v0, Bolt, Lovable, screenshot-to-code tools',
+    icon: Palette,
+    href: '/tools?category=ai-design-ui',
+  },
+  {
+    title: 'Prompting & Context',
+    description: 'Prompt libraries, .cursorrules, context management',
+    icon: MessageSquare,
+    href: '/tools?category=prompting-context',
+  },
+  {
+    title: 'Deployment & Backend',
+    description: 'Supabase, Vercel, Railway, Firebase, and more',
+    icon: Rocket,
+    href: '/tools?category=deployment-backend',
+  },
+]
+
+const features = [
+  {
+    title: 'Curated Tool Directory',
+    description: 'Browse 30+ hand-picked AI coding tools organized by category with ratings, comparisons, and detailed reviews.',
+    icon: Code,
+  },
+  {
+    title: 'Live News Feed',
+    description: 'Stay current with auto-aggregated AI coding news from Reddit, Hacker News, and Dev.to — updated every 30 minutes.',
+    icon: Newspaper,
+  },
+  {
+    title: 'Workflow Templates',
+    description: 'Follow step-by-step guides like "Build a SaaS in a Weekend" with recommended tool stacks.',
+    icon: Workflow,
+  },
+]
+
+async function getFeaturedTools() {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('tools')
+    .select('id, name, slug, description, pricing, is_featured, avg_rating, category:categories(name)')
+    .eq('is_published', true)
+    .eq('is_featured', true)
+    .limit(6)
+
+  return data || []
+}
+
+export default async function HomePage() {
+  const featuredTools = await getFeaturedTools()
+
+  return (
+    <div>
+      {/* Hero */}
+      <section className="relative overflow-hidden py-24 sm:py-32">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(45%_40%_at_50%_60%,var(--tw-gradient-from)_0%,transparent_100%)] from-primary/5" />
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
+              Your command center for{' '}
+              <span className="bg-gradient-to-r from-blue-500 to-violet-500 bg-clip-text text-transparent">
+                vibe coding
+              </span>
+            </h1>
+            <p className="mt-6 text-lg leading-8 text-muted-foreground">
+              Discover, compare, and organize the best AI coding tools.
+              Curated directory, trending news, workflow templates, and a
+              personal dashboard — all in one place.
+            </p>
+            <div className="mt-10 flex items-center justify-center gap-4">
+              <Button size="lg" asChild>
+                <Link href="/tools">
+                  Browse Tools <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" asChild>
+                <Link href="/signup">Get Started</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Tools */}
+      {featuredTools.length > 0 && (
+        <section className="border-t border-border py-16">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold sm:text-3xl">Featured Tools</h2>
+                <p className="mt-2 text-muted-foreground">
+                  Top-rated tools loved by vibe coders
+                </p>
+              </div>
+              <Button variant="ghost" asChild>
+                <Link href="/tools">
+                  View all <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {featuredTools.map((tool) => (
+                <Link key={tool.id} href={`/tools/${tool.slug}`}>
+                  <Card className="h-full transition-all hover:shadow-md hover:border-primary/20">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-start justify-between">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-lg font-semibold text-primary">
+                          {tool.name.charAt(0)}
+                        </div>
+                        <Badge variant="secondary" className="shrink-0">
+                          <Star className="mr-1 h-3 w-3 fill-yellow-400 text-yellow-400" />
+                          Featured
+                        </Badge>
+                      </div>
+                      <div className="mt-3">
+                        <CardTitle className="flex items-center gap-2">
+                          {tool.name}
+                          <PricingBadge pricing={tool.pricing} />
+                        </CardTitle>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {tool.category?.name}
+                        </p>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground line-clamp-2">
+                        {tool.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Categories */}
+      <section className="border-t border-border py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-center text-2xl font-bold sm:text-3xl">
+            Explore by Category
+          </h2>
+          <p className="mt-2 text-center text-muted-foreground">
+            Find the right tools for every part of your vibe coding workflow
+          </p>
+          <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {categories.map((cat) => (
+              <Link key={cat.href} href={cat.href}>
+                <Card className="h-full transition-colors hover:bg-accent">
+                  <CardHeader>
+                    <cat.icon className="h-8 w-8 text-primary" />
+                    <CardTitle className="mt-2">{cat.title}</CardTitle>
+                    <CardDescription>{cat.description}</CardDescription>
+                  </CardHeader>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section className="border-t border-border py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-center text-2xl font-bold sm:text-3xl">
+            Everything You Need
+          </h2>
+          <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-3">
+            {features.map((feature) => (
+              <div key={feature.title} className="text-center">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                  <feature.icon className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="mt-4 text-lg font-semibold">{feature.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {feature.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="border-t border-border py-16">
+        <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold sm:text-3xl">
+            Ready to level up your vibe coding?
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            Create a free account to save favorites, bookmark articles, and track your workflow.
+          </p>
+          <div className="mt-8">
+            <Button size="lg" asChild>
+              <Link href="/signup">
+                Get Started Free <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}

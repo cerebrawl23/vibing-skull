@@ -24,6 +24,9 @@
 .DS_Store
 *.pem
 
+# mcp config (contains API tokens)
+.mcp.json
+
 # debug
 npm-debug.log*
 yarn-debug.log*
@@ -32,6 +35,21 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+
+# secrets
+client_secret*.json
+*.pem
+*.key
+
+# claude
+.claude/
+claude.md.txt
+
+# misc
+nul
+*.json.bak
+Hostinger*.json
 
 # vercel
 .vercel
