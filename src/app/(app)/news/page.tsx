@@ -30,16 +30,17 @@ async function getArticles(source?: string, sort?: string) {
     query = query.eq('source', source as 'reddit' | 'hackernews' | 'devto')
   }
 
-  // Sort by relevance (default), score, or recent
+  // Sort by recent (default), relevance, or score
   switch (sort) {
+    case 'relevance':
+      query = query.order('relevance_score', { ascending: false, nullsFirst: false })
+      break
     case 'score':
       query = query.order('score', { ascending: false, nullsFirst: false })
       break
-    case 'recent':
-      query = query.order('published_at', { ascending: false })
-      break
     default:
-      query = query.order('relevance_score', { ascending: false, nullsFirst: false })
+      // Default to most recent
+      query = query.order('published_at', { ascending: false })
   }
 
   const { data } = await query

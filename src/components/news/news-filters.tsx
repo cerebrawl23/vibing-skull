@@ -11,9 +11,9 @@ const sourceOptions = [
 ]
 
 const sortOptions = [
+  { value: 'recent', label: 'Recent' },
   { value: 'relevance', label: 'Relevance' },
   { value: 'score', label: 'Score' },
-  { value: 'recent', label: 'Recent' },
 ]
 
 interface NewsFiltersProps {
@@ -27,7 +27,7 @@ export function NewsFilters({ selectedSource, selectedSort }: NewsFiltersProps) 
 
   const updateParams = (key: string, value: string | null) => {
     const params = new URLSearchParams(searchParams.toString())
-    if (value && value !== 'all' && value !== 'relevance') {
+    if (value && value !== 'all' && value !== 'recent') {
       params.set(key, value)
     } else {
       params.delete(key)
@@ -59,7 +59,7 @@ export function NewsFilters({ selectedSource, selectedSort }: NewsFiltersProps) 
         {sortOptions.map((option) => (
           <Button
             key={option.value}
-            variant={selectedSort === option.value || (!selectedSort && option.value === 'relevance') ? 'default' : 'outline'}
+            variant={selectedSort === option.value || (!selectedSort && option.value === 'recent') ? 'default' : 'outline'}
             size="sm"
             onClick={() => updateParams('sort', option.value)}
             className="h-7"
