@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Code, Newspaper, Workflow, LayoutDashboard } from 'lucide-react'
+import { Code, Newspaper, Workflow, LayoutDashboard, BookOpen } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Logo } from './logo'
 import { ThemeToggle } from './theme-toggle'
@@ -11,6 +11,7 @@ import { SidebarUser } from '@/components/auth/sidebar-user'
 const navItems = [
   { href: '/tools', label: 'Tools', icon: Code },
   { href: '/news', label: 'News', icon: Newspaper },
+  { href: '/learn', label: 'Learn', icon: BookOpen },
   { href: '/workflows', label: 'Workflows', icon: Workflow },
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
 ]

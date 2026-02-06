@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, Code, Palette, MessageSquare, Rocket, Newspaper, Workflow, Star } from 'lucide-react'
+import { ArrowRight, Code, Palette, MessageSquare, Rocket, Newspaper, Workflow, Star, BookOpen, Zap, ExternalLink } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
@@ -41,14 +41,36 @@ const features = [
   },
   {
     title: 'Live News Feed',
-    description: 'Stay current with auto-aggregated AI coding news from Reddit, Hacker News, and Dev.to — updated every 30 minutes.',
+    description: 'Stay current with auto-aggregated AI coding news from Reddit, Hacker News, and Dev.to.',
     icon: Newspaper,
+  },
+  {
+    title: 'Tips & Guides',
+    description: 'Learn Claude Code tricks, Cursor tips, prompt engineering, and more from our curated guides.',
+    icon: BookOpen,
   },
   {
     title: 'Workflow Templates',
     description: 'Follow step-by-step guides like "Build a SaaS in a Weekend" with recommended tool stacks.',
     icon: Workflow,
   },
+]
+
+const quickLinks = [
+  { title: 'Claude Code Docs', url: 'https://docs.anthropic.com/en/docs/claude-code', external: true },
+  { title: 'Cursor Docs', url: 'https://docs.cursor.com', external: true },
+  { title: 'Awesome CursorRules', url: 'https://github.com/PatrickJS/awesome-cursorrules', external: true },
+  { title: 'Prompt Guide', url: 'https://www.promptingguide.ai', external: true },
+  { title: 'Learn Tips', url: '/learn', external: false },
+  { title: 'Compare Tools', url: '/tools/compare', external: false },
+]
+
+const dailyTips = [
+  'Create a CLAUDE.md file in your project root to give Claude persistent context about your codebase.',
+  'Use "proceed" instead of "yes" when Claude asks for confirmation - it\'s faster to type.',
+  'In Cursor, press Cmd+K on selected code for inline edits without opening the chat.',
+  'Ask AI to "think step by step" for complex problems - reasoning improves accuracy.',
+  'Create a .cursorrules file in every project to dramatically improve output quality.',
 ]
 
 async function getFeaturedTools() {
@@ -183,7 +205,7 @@ export default async function HomePage() {
           <h2 className="text-center text-2xl font-bold sm:text-3xl">
             Everything You Need
           </h2>
-          <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-3">
+          <div className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {features.map((feature) => (
               <div key={feature.title} className="text-center">
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
@@ -195,6 +217,50 @@ export default async function HomePage() {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Quick Links & Tip */}
+      <section className="border-t border-border py-16 bg-muted/30">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-8 lg:grid-cols-2">
+            {/* Tip of the Day */}
+            <Card className="border-primary/30 bg-primary/5">
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <Zap className="h-5 w-5 text-primary" />
+                  <CardTitle>Tip of the Day</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  {dailyTips[Math.floor(Date.now() / 86400000) % dailyTips.length]}
+                </p>
+                <Link href="/learn" className="mt-4 inline-flex items-center text-sm text-primary hover:underline">
+                  More tips & guides <ArrowRight className="ml-1 h-3 w-3" />
+                </Link>
+              </CardContent>
+            </Card>
+
+            {/* Quick Links */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {quickLinks.map((link) => (
+                  <Link
+                    key={link.title}
+                    href={link.url}
+                    target={link.external ? '_blank' : undefined}
+                    rel={link.external ? 'noopener noreferrer' : undefined}
+                    className="flex items-center gap-2 p-3 rounded-lg border bg-card hover:bg-accent transition-colors text-sm"
+                  >
+                    {link.title}
+                    {link.external && <ExternalLink className="h-3 w-3 text-muted-foreground" />}
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
