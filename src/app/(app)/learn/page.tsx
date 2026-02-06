@@ -13,7 +13,10 @@ import {
   Code,
   Wand2,
   CheckCircle,
-  ArrowRight
+  ArrowRight,
+  Flame,
+  Settings,
+  FolderOpen
 } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -283,6 +286,167 @@ const dailyTips = [
   },
 ]
 
+const hotTopics = [
+  {
+    title: 'CLAUDE.md',
+    category: 'Configuration',
+    isHot: true,
+    description: 'Claude Code\'s native configuration file for project context and instructions.',
+    details: [
+      'Loaded automatically into every conversation',
+      'Global: ~/.claude/CLAUDE.md (applies everywhere)',
+      'Project: ./CLAUDE.md (project-specific)',
+      'Think of it as "README for Claude"',
+    ],
+    example: `# Project: My SaaS App
+Tech: Next.js 14, TypeScript, Tailwind, Supabase
+Style: Functional components, named exports
+Testing: Jest + React Testing Library
+Never: Use any type, skip error handling`,
+    tip: 'Keep it minimal—only universally applicable instructions. It goes into every single session.',
+  },
+  {
+    title: 'AGENTS.md',
+    category: 'Configuration',
+    isHot: true,
+    description: 'Universal open standard for AI agent configuration that works across multiple tools.',
+    details: [
+      'Works with Cursor, Zed, GitHub Copilot, Gemini CLI',
+      'Not natively read by Claude Code (add reference in CLAUDE.md)',
+      'Portable across different AI tools',
+      'Community-driven standard',
+    ],
+    example: `# AGENTS.md
+## Context
+Full-stack TypeScript project using React.
+
+## Instructions
+- Follow existing code patterns
+- Add tests for new features
+- Use descriptive variable names`,
+    tip: 'Use both: AGENTS.md for universal compatibility, CLAUDE.md for Claude-specific features.',
+  },
+  {
+    title: '.claude Folder',
+    category: 'Configuration',
+    isHot: false,
+    description: 'Project-level configuration directory for Claude Code settings, commands, and agents.',
+    details: [
+      '.claude/settings.json - Project settings',
+      '.claude/settings.local.json - Local overrides (gitignored)',
+      '.claude/commands/ - Custom slash commands',
+      '.claude/agents/ - Custom subagent definitions',
+    ],
+    example: `// .claude/settings.json
+{
+  "permissions": {
+    "deny": [".env", "secrets/", "*.pem"]
+  },
+  "hooks": {
+    "onFileChange": "npm run lint"
+  }
+}`,
+    tip: 'Use permissions.deny to protect sensitive files. Commit settings.json, gitignore settings.local.json.',
+  },
+  {
+    title: 'Claude Cowork',
+    category: 'Feature',
+    isHot: true,
+    description: 'Claude Code for non-coding work—file management, document processing, and office tasks.',
+    details: [
+      'Built into Claude Desktop (Mac)',
+      'Designate a folder for Claude to read/modify',
+      'Runs in isolated VM for security',
+      'Creates plans, executes tasks, delivers outputs',
+    ],
+    example: `Example tasks:
+• "Organize my Downloads folder by file type"
+• "Turn these receipt screenshots into an expense spreadsheet"
+• "Create a summary from these meeting notes"
+• "Rename and organize these photos by date"`,
+    tip: 'Available to Pro ($20/mo) and Max ($100+/mo) subscribers. Built entirely using Claude Code!',
+  },
+  {
+    title: 'AskUserQuestion Tool',
+    category: 'Feature',
+    isHot: true,
+    description: 'Claude pauses and asks YOU structured questions when it detects ambiguity.',
+    details: [
+      'Inverts the prompt relationship—the AI prompts you',
+      'Multiple choice, checkboxes, and text input',
+      'Surfaces design decisions upfront (cheaper to change)',
+      'Best in Plan Mode (Shift+Tab x2)',
+    ],
+    example: `Claude asks:
+"Which auth strategy should I use?"
+○ JWT tokens (stateless, scalable)
+○ Session cookies (simpler, traditional)
+○ OAuth only (delegate to providers)
+
+You select → Claude implements correctly`,
+    tip: 'Add "ask clarifying questions before implementing" to CLAUDE.md to trigger this more often.',
+  },
+  {
+    title: 'Custom Subagents',
+    category: 'Feature',
+    isHot: false,
+    description: 'Create specialized autonomous agents that Claude can spawn for specific tasks.',
+    details: [
+      'Defined in .claude/agents/ as Markdown + YAML',
+      'Up to 7 simultaneous subagent operations',
+      'Built-in agents: Explore, Plan, general-purpose',
+      'Create via /agents command or manually',
+    ],
+    example: `---
+name: test-runner
+description: Run and fix failing tests
+tools: [Bash, Read, Edit]
+---
+# Test Runner Agent
+Run the test suite, analyze failures,
+and fix broken tests automatically.`,
+    tip: 'Subagents dramatically speed up complex workflows like codebase exploration and multi-file analysis.',
+  },
+]
+
+const crossAIConfig = [
+  {
+    tool: 'Claude Code',
+    file: 'CLAUDE.md',
+    location: 'Project root or ~/.claude/',
+    notes: 'Hierarchical loading, supports subagents',
+    link: 'https://code.claude.com/docs',
+  },
+  {
+    tool: 'Cursor',
+    file: '.cursorrules',
+    location: 'Project root',
+    notes: 'Also supports .cursor/rules/',
+    link: 'https://docs.cursor.com',
+  },
+  {
+    tool: 'Gemini CLI',
+    file: 'GEMINI.md',
+    location: 'Project root',
+    notes: 'Also reads AGENTS.md, .cursorrules',
+    link: 'https://geminicli.com/docs',
+  },
+  {
+    tool: 'ChatGPT',
+    file: 'Custom Instructions',
+    location: 'Settings → Personalization',
+    notes: '1,500 char limit, applies to all chats',
+    link: 'https://help.openai.com',
+  },
+  {
+    tool: 'GitHub Copilot',
+    file: '.github/copilot-instructions.md',
+    location: 'Repository root',
+    notes: 'Supports AGENTS.md standard',
+    link: 'https://docs.github.com/copilot',
+  },
+]
+
 const quickLinks = [
   { title: 'Claude Code Docs', url: 'https://docs.anthropic.com/en/docs/claude-code', icon: BookOpen },
   { title: 'Cursor Docs', url: 'https://docs.cursor.com', icon: BookOpen },
@@ -401,6 +565,100 @@ export default function LearnPage() {
             </Card>
           ))}
         </div>
+      </section>
+
+      {/* Hot Topics */}
+      <section className="mb-12">
+        <div className="flex items-center gap-3 mb-6">
+          <Flame className="h-6 w-6 text-orange-500" />
+          <div>
+            <h2 className="text-2xl font-bold">Hot Topics: Configuration Files & Features</h2>
+            <p className="text-sm text-muted-foreground">CLAUDE.md, AGENTS.md, Cowork, AskUserQuestion, and more</p>
+          </div>
+        </div>
+        <div className="grid gap-6 lg:grid-cols-2">
+          {hotTopics.map((topic) => (
+            <Card key={topic.title} className={topic.isHot ? 'border-orange-500/30' : ''}>
+              <CardHeader className="pb-3">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-2">
+                    {topic.category === 'Configuration' ? (
+                      <FolderOpen className="h-5 w-5 text-blue-500" />
+                    ) : (
+                      <Settings className="h-5 w-5 text-purple-500" />
+                    )}
+                    <CardTitle className="text-lg">{topic.title}</CardTitle>
+                    {topic.isHot && (
+                      <Badge className="bg-orange-500/20 text-orange-600 border-orange-500/30">
+                        <Flame className="h-3 w-3 mr-1" /> Hot
+                      </Badge>
+                    )}
+                  </div>
+                  <Badge variant="outline" className="text-xs">{topic.category}</Badge>
+                </div>
+                <CardDescription className="mt-2">{topic.description}</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <ul className="text-sm text-muted-foreground space-y-1">
+                  {topic.details.map((detail) => (
+                    <li key={detail} className="flex items-start gap-2">
+                      <CheckCircle className="h-3 w-3 text-green-500 mt-1 shrink-0" />
+                      {detail}
+                    </li>
+                  ))}
+                </ul>
+                <div className="p-3 rounded-lg bg-muted/50 border">
+                  <p className="text-xs font-semibold text-muted-foreground mb-2">Example:</p>
+                  <pre className="text-xs text-muted-foreground whitespace-pre-wrap font-mono overflow-x-auto">
+                    {topic.example}
+                  </pre>
+                </div>
+                <div className="pt-2 border-t">
+                  <p className="text-xs text-muted-foreground">
+                    <span className="font-semibold text-foreground">Pro Tip:</span> {topic.tip}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Cross-AI Configuration Table */}
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle className="text-base flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              Configuration Files Across AI Tools
+            </CardTitle>
+            <CardDescription>How to set up instructions for each major AI coding tool</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left py-2 px-3 font-semibold">Tool</th>
+                    <th className="text-left py-2 px-3 font-semibold">Config File</th>
+                    <th className="text-left py-2 px-3 font-semibold">Location</th>
+                    <th className="text-left py-2 px-3 font-semibold">Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {crossAIConfig.map((config) => (
+                    <tr key={config.tool} className="border-b last:border-0">
+                      <td className="py-2 px-3 font-medium">{config.tool}</td>
+                      <td className="py-2 px-3">
+                        <code className="text-xs bg-muted px-1 py-0.5 rounded">{config.file}</code>
+                      </td>
+                      <td className="py-2 px-3 text-muted-foreground">{config.location}</td>
+                      <td className="py-2 px-3 text-muted-foreground">{config.notes}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
       </section>
 
       {/* Coding Tools */}
