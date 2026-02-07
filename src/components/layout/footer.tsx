@@ -32,6 +32,11 @@ export function Footer() {
                   Workflows
                 </Link>
               </li>
+              <li>
+                <Link href="/beginners" className="text-sm text-muted-foreground hover:text-foreground">
+                  Beginners Guide
+                </Link>
+              </li>
             </ul>
           </div>
 

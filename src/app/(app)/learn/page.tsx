@@ -482,6 +482,27 @@ export default function LearnPage() {
         </CardContent>
       </Card>
 
+      {/* Beginners Banner */}
+      <Link href="/beginners" className="group mb-8 block">
+        <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 p-6 text-white shadow-lg transition-transform hover:scale-[1.01]">
+          <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10 blur-2xl" />
+          <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:text-left">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
+              <Sparkles className="h-6 w-6" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-lg font-black sm:text-xl">New to AI? Check out our Beginners Guide!</h3>
+              <p className="mt-0.5 text-sm text-white/90">
+                13 bite-sized lessons for ages 8-17 — prompting, free tools, safety, and projects.
+              </p>
+            </div>
+            <div className="flex shrink-0 items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-bold text-purple-700 shadow-md transition-transform group-hover:scale-105">
+              Start Learning <ArrowRight className="h-3.5 w-3.5" />
+            </div>
+          </div>
+        </div>
+      </Link>
+
       {/* The Big 3 AI */}
       <section className="mb-12">
         <div className="flex items-center gap-3 mb-6">

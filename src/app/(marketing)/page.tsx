@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, Code, Palette, MessageSquare, Rocket, Newspaper, Workflow, Star, BookOpen, Zap, ExternalLink } from 'lucide-react'
+import { ArrowRight, Code, Palette, MessageSquare, Rocket, Newspaper, Workflow, Star, BookOpen, Zap, ExternalLink, Sparkles } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
@@ -262,6 +262,32 @@ export default async function HomePage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Beginners Banner */}
+      <section className="border-t border-border py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Link href="/beginners" className="group block">
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 p-8 text-white shadow-lg transition-transform hover:scale-[1.01] sm:p-10">
+              <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
+              <div className="absolute -left-10 bottom-0 h-32 w-32 rounded-full bg-white/10 blur-2xl" />
+              <div className="relative flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left">
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm">
+                  <Sparkles className="h-8 w-8" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-black sm:text-3xl">New to AI? Start Here!</h3>
+                  <p className="mt-1 text-white/90">
+                    13 bite-sized lessons for ages 8-17. Learn prompting, discover free tools, and build cool things — no experience needed.
+                  </p>
+                </div>
+                <div className="flex shrink-0 items-center gap-2 rounded-full bg-white px-6 py-3 font-bold text-purple-700 shadow-md transition-transform group-hover:scale-105">
+                  Start Learning <ArrowRight className="h-4 w-4" />
+                </div>
+              </div>
+            </div>
+          </Link>
         </div>
       </section>
 

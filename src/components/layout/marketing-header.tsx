@@ -51,6 +51,9 @@ export function MarketingHeader() {
           <Link href="/workflows" className="text-sm text-muted-foreground hover:text-foreground">
             Workflows
           </Link>
+          <Link href="/beginners" className="text-sm font-semibold text-purple-600 hover:text-purple-500 dark:text-purple-400 dark:hover:text-purple-300">
+            Beginners
+          </Link>
         </nav>
         <div className="flex items-center gap-2">
           <ThemeToggle />

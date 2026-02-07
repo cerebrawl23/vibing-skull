@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Code, Newspaper, Workflow, LayoutDashboard, BookOpen } from 'lucide-react'
+import { Code, Newspaper, Workflow, LayoutDashboard, BookOpen, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Logo } from './logo'
 import { ThemeToggle } from './theme-toggle'
@@ -13,6 +13,7 @@ const navItems = [
   { href: '/news', label: 'News', icon: Newspaper },
   { href: '/learn', label: 'Learn', icon: BookOpen },
   { href: '/workflows', label: 'Workflows', icon: Workflow },
+  { href: '/beginners', label: 'Beginners', icon: Sparkles },
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
 ]
 
