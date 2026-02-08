@@ -4,6 +4,54 @@ All notable changes to The Vibing Skull project.
 
 ---
 
+## [1.2.0] - 2026-02-08
+
+### Project Tools Expansion
+
+#### Added
+
+- Copyable "Day Zero" Project Onboarding Prompt template
+- Copyable Project Kickoff Master Prompt (13 deliverables)
+- "The Ultimate Vibe Coding Guide" — 18 best practices for AI-assisted coding
+- Essential Project Files section (CLAUDE.md, AGENTS.md, skills.md, CHANGELOG.md, FEATURES.md, PROJECT.md, README.md explained)
+- CopyButton reusable client component (`src/components/ui/copy-button.tsx`)
+- Expanded "Common Mistakes" section from 5 to 8 items
+
+#### Changed
+
+- Project Tools page fully rewritten with 6 major sections
+- Updated project folder structure template to include all essential files
+- Common mistakes now displayed in 2-column grid layout
+
+---
+
+## [1.1.0] - 2026-02-08
+
+### Site Restructure & New Pages
+
+#### Added
+
+- **Cheat Sheets page** (`/cheatsheets`) — Prompting templates, AI tools quick reference, keyboard shortcuts, PTCF framework
+- **Important Links page** (`/links`) — 40+ curated links: official docs, learning resources, AI communities, newsletters, GitHub repos, free tools
+- **Project Tools page** (`/project-tools`) — 4 recommended tech stacks, project preparation best practices, common mistakes, folder structure template
+- **Beginners Guide** (`/beginners`) — 13 expandable lessons for ages 8-17, bright gradient theme, PTCF cheatsheet, fun facts, challenges
+- Beginners banner on homepage (right after hero section)
+- Beginners banner on Learning page
+- Grouped sidebar navigation with section headers (Dashboard, Learn, Build, Stay Updated)
+- Mobile navigation mirroring sidebar structure
+- Middleware redirect: logged-in users at `/` go to `/dashboard`
+- Middleware protection: unauthenticated users at `/dashboard` go to `/login`
+- New routes added to sitemap.ts (`/beginners`, `/learn`, `/cheatsheets`, `/project-tools`, `/links`)
+
+#### Changed
+
+- Sidebar rewritten from flat nav to grouped sections
+- Marketing header updated with new nav links (Learning, A.I. Tools, News, Beginners)
+- Footer restructured into Learn / Build / Account columns
+- Marketing header Beginners link styled in purple
+
+---
+
 ## [1.0.0] - 2026-02-06
 
 ### Initial Release
@@ -74,7 +122,7 @@ All notable changes to The Vibing Skull project.
 - Framework: Next.js 16 (App Router)
 - Language: TypeScript
 - Database: PostgreSQL (Supabase)
-- Styling: Tailwind CSS + shadcn/ui
+- Styling: Tailwind CSS 4 + shadcn/ui
 - Validation: Zod schemas
 - Icons: Lucide React
 
@@ -92,23 +140,4 @@ All notable changes to The Vibing Skull project.
 
 ---
 
-## Upcoming
-
-### Planned Features
-- [ ] Chrome extension for quick tool access
-- [ ] VSCode extension integration
-- [ ] Desktop app (Electron/Tauri)
-- [ ] Tool submission by users
-- [ ] Community voting on tools
-- [ ] Newsletter integration
-- [ ] AI-powered tool recommendations
-- [ ] Workflow builder (custom workflows)
-- [ ] Team/organization accounts
-- [ ] API rate limiting dashboard
-
-### Improvements
-- [ ] Upgrade to Vercel Pro for more frequent cron jobs
-- [ ] Add more news sources
-- [ ] Implement full-text search
-- [ ] Add tool changelogs/updates tracking
-- [ ] Email notifications for bookmarked tool updates
+*Last updated: February 2026*
