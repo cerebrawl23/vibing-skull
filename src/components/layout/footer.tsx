@@ -29,7 +29,7 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/cheatsheets" className="text-sm text-muted-foreground hover:text-foreground">
-                  Cheat Sheets
+                  Prompt Library
                 </Link>
               </li>
             </ul>

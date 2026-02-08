@@ -1,110 +1,58 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
-import { Newspaper } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
-import { NewsFeed } from '@/components/news/news-feed'
-import { NewsFilters } from '@/components/news/news-filters'
+import { TldrNews } from '@/components/news/tldr-news'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export const metadata: Metadata = {
-  title: 'News Feed',
-  description: 'Trending AI and vibe coding news from Reddit, Hacker News, and Dev.to.',
+  title: 'Daily Digest - The Vibing Skull',
+  description: 'AI and vibe coding news curated daily from Reddit, Hacker News, and Dev.to.',
 }
 
-interface NewsPageProps {
-  searchParams: Promise<{
-    source?: string
-    sort?: string
-  }>
-}
-
-async function getArticles(source?: string, sort?: string) {
+async function getArticles() {
   const supabase = await createClient()
 
-  let query = supabase
+  const { data } = await supabase
     .from('news_articles')
     .select('*')
-    .limit(50)
+    .order('published_at', { ascending: false })
+    .limit(100)
 
-  if (source && source !== 'all' && ['reddit', 'hackernews', 'devto'].includes(source)) {
-    query = query.eq('source', source as 'reddit' | 'hackernews' | 'devto')
-  }
-
-  // Sort by recent (default), relevance, or score
-  switch (sort) {
-    case 'relevance':
-      query = query.order('relevance_score', { ascending: false, nullsFirst: false })
-      break
-    case 'score':
-      query = query.order('score', { ascending: false, nullsFirst: false })
-      break
-    default:
-      // Default to most recent
-      query = query.order('published_at', { ascending: false })
-  }
-
-  const { data } = await query
   return data || []
 }
 
-function NewsFeedSkeleton() {
+function NewsSkeleton() {
   return (
-    <div className="space-y-3">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <div key={i} className="rounded-lg border p-4">
-          <div className="flex items-start gap-3">
-            <div className="flex flex-col items-center gap-1">
-              <Skeleton className="h-4 w-4" />
-              <Skeleton className="h-4 w-6" />
-            </div>
-            <div className="flex-1 space-y-2">
-              <Skeleton className="h-4 w-16" />
-              <Skeleton className="h-5 w-full" />
-              <Skeleton className="h-4 w-3/4" />
-              <div className="flex gap-3">
-                <Skeleton className="h-3 w-20" />
-                <Skeleton className="h-3 w-16" />
-              </div>
-            </div>
-          </div>
+    <div className="space-y-4">
+      <div className="flex items-center gap-3">
+        <Skeleton className="h-10 w-10 rounded-lg" />
+        <div className="space-y-2">
+          <Skeleton className="h-6 w-40" />
+          <Skeleton className="h-4 w-60" />
         </div>
+      </div>
+      <div className="flex gap-2">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <Skeleton key={i} className="h-7 w-16 rounded-full" />
+        ))}
+      </div>
+      <Skeleton className="h-32 w-full rounded-lg" />
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Skeleton key={i} className="h-24 w-full rounded-lg" />
       ))}
     </div>
   )
 }
 
-async function NewsContent({ source, sort }: { source?: string; sort?: string }) {
-  const articles = await getArticles(source, sort)
-  return <NewsFeed articles={articles} />
+async function NewsContent() {
+  const articles = await getArticles()
+  return <TldrNews articles={articles} />
 }
 
-export default async function NewsPage({ searchParams }: NewsPageProps) {
-  const params = await searchParams
-
+export default function NewsPage() {
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-          <Newspaper className="h-5 w-5 text-primary" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold">News Feed</h1>
-          <p className="text-sm text-muted-foreground">
-            Trending AI and vibe coding news from across the web
-          </p>
-        </div>
-      </div>
-
-      <Suspense fallback={<div className="h-12" />}>
-        <NewsFilters
-          selectedSource={params.source || null}
-          selectedSort={params.sort || null}
-        />
-      </Suspense>
-
-      <Suspense fallback={<NewsFeedSkeleton />}>
-        <NewsContent source={params.source} sort={params.sort} />
-      </Suspense>
-    </div>
+    <Suspense fallback={<NewsSkeleton />}>
+      <NewsContent />
+    </Suspense>
   )
 }

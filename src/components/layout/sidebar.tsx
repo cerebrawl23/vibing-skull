@@ -37,7 +37,7 @@ const navSections: NavSection[] = [
     title: 'Learn',
     items: [
       { href: '/learn', label: 'Learning', icon: BookOpen },
-      { href: '/cheatsheets', label: 'Cheat Sheets', icon: FileText },
+      { href: '/cheatsheets', label: 'Prompt Library', icon: FileText },
     ],
   },
   {
