@@ -42,14 +42,14 @@ export function MarketingHeader() {
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Logo />
         <nav className="hidden items-center gap-6 md:flex">
+          <Link href="/learn" className="text-sm text-muted-foreground hover:text-foreground">
+            Learning
+          </Link>
           <Link href="/tools" className="text-sm text-muted-foreground hover:text-foreground">
-            Tools
+            A.I. Tools
           </Link>
           <Link href="/news" className="text-sm text-muted-foreground hover:text-foreground">
             News
-          </Link>
-          <Link href="/workflows" className="text-sm text-muted-foreground hover:text-foreground">
-            Workflows
           </Link>
           <Link href="/beginners" className="text-sm font-semibold text-purple-600 hover:text-purple-500 dark:text-purple-400 dark:hover:text-purple-300">
             Beginners

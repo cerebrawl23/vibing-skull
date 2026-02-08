@@ -15,21 +15,11 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold">Explore</h3>
+            <h3 className="text-sm font-semibold">Learn</h3>
             <ul className="mt-3 space-y-2">
               <li>
-                <Link href="/tools" className="text-sm text-muted-foreground hover:text-foreground">
-                  Tool Directory
-                </Link>
-              </li>
-              <li>
-                <Link href="/news" className="text-sm text-muted-foreground hover:text-foreground">
-                  News Feed
-                </Link>
-              </li>
-              <li>
-                <Link href="/workflows" className="text-sm text-muted-foreground hover:text-foreground">
-                  Workflows
+                <Link href="/learn" className="text-sm text-muted-foreground hover:text-foreground">
+                  Learning Hub
                 </Link>
               </li>
               <li>
@@ -37,30 +27,35 @@ export function Footer() {
                   Beginners Guide
                 </Link>
               </li>
+              <li>
+                <Link href="/cheatsheets" className="text-sm text-muted-foreground hover:text-foreground">
+                  Cheat Sheets
+                </Link>
+              </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold">Categories</h3>
+            <h3 className="text-sm font-semibold">Build</h3>
             <ul className="mt-3 space-y-2">
               <li>
-                <Link href="/tools?category=ai-code-assistants" className="text-sm text-muted-foreground hover:text-foreground">
-                  AI Code Assistants
+                <Link href="/tools" className="text-sm text-muted-foreground hover:text-foreground">
+                  A.I. Tools
                 </Link>
               </li>
               <li>
-                <Link href="/tools?category=ai-design-ui" className="text-sm text-muted-foreground hover:text-foreground">
-                  AI Design & UI
+                <Link href="/project-tools" className="text-sm text-muted-foreground hover:text-foreground">
+                  Project Tools & Stacks
                 </Link>
               </li>
               <li>
-                <Link href="/tools?category=prompting-context" className="text-sm text-muted-foreground hover:text-foreground">
-                  Prompting & Context
+                <Link href="/news" className="text-sm text-muted-foreground hover:text-foreground">
+                  News
                 </Link>
               </li>
               <li>
-                <Link href="/tools?category=deployment-backend" className="text-sm text-muted-foreground hover:text-foreground">
-                  Deployment & Backend
+                <Link href="/links" className="text-sm text-muted-foreground hover:text-foreground">
+                  Important Links
                 </Link>
               </li>
             </ul>
