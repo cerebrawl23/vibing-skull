@@ -4,6 +4,50 @@ All notable changes to The Vibing Skull project.
 
 ---
 
+## [1.4.0] - 2026-02-22
+
+### Learn Page Redesign & Daily Digest
+
+#### Added
+
+- **Daily Digest API** (`/api/v1/digest`) — Auto-fetches RSS from Anthropic, OpenAI, and Google AI blogs
+- **DailyDigest component** — Renders latest official blog posts with source badges and time-ago labels
+- **Waterfall layout** — Progressive disclosure: simple hero → Big 3 → Prompting → Tips → What's New → Links
+- **Who/What/When/How structure** for each AI (Claude, ChatGPT, Gemini)
+- **Top 3 tools per AI** — 9 curated tools organized by which AI they complement
+- **Expandable "How to Get Started"** sections with model info and tool links
+- 8 actionable tips covering CLAUDE.md, AskUserQuestion, Plan Mode, config files, subagents
+
+#### Changed
+
+- Learn page completely rewritten from 28-card grid to focused 5-section waterfall
+- Reduced from 822 lines to ~350 lines (simpler, cleaner)
+- ISR caching (1 hour) for digest — zero database, zero cron needed
+
+#### Removed
+
+- Category filter system (replaced by waterfall sections)
+- Search bar on Learn page (content is now scannable without search)
+- Redundant guide cards (configuration, capabilities sections merged into Big 3)
+
+---
+
+## [1.3.0] - 2026-02-22
+
+### UX Improvements & Model Updates
+
+#### Added
+
+- Updated all AI model information to Feb 2026 (Opus 4.6, GPT-5, Gemini 3)
+
+#### Changed
+
+- Auth callback redirects to `/dashboard` instead of `/tools` after login
+- News feed defaults to "Recent" sort instead of "Relevance"
+- Sort options reordered: Recent first, then Relevance, then Score
+
+---
+
 ## [1.2.0] - 2026-02-08
 
 ### Project Tools Expansion

@@ -73,12 +73,29 @@ Ship your apps with modern infrastructure.
 
 ## Tool Highlights
 
-### Editor's Picks
+### Editor's Picks (Feb 2026)
 
-1. **Cursor** - The most popular AI code editor, seamlessly integrates AI into your workflow
-2. **Claude Code** - Powerful agentic coding for complex multi-file tasks
-3. **v0 by Vercel** - Revolutionary UI generation from natural language
-4. **Supabase** - The best backend-as-a-service for modern apps
+1. **Claude Code** - Autonomous CLI agent, multi-file editing, CLAUDE.md context — best for complex tasks
+2. **Cursor** - AI-first code editor with Composer, inline generation, .cursorrules config
+3. **v0 by Vercel** - Text-to-React UI generation with shadcn/ui integration
+4. **Supabase** - Open-source Firebase alternative with PostgreSQL and auth
+
+### Top 3 Tools per AI
+
+**Claude ecosystem:**
+1. **Claude Code** — Autonomous terminal agent with CLAUDE.md project context
+2. **Cursor (with Claude)** — AI code editor with Composer for multi-file edits
+3. **Cline** — VSCode agent with terminal access and browser automation
+
+**ChatGPT/OpenAI ecosystem:**
+1. **GitHub Copilot** — Real-time code suggestions in any IDE
+2. **ChatGPT Canvas** — Side-by-side code editing with visual collaboration
+3. **v0 by Vercel** — Generate React/Next.js UI components from text prompts
+
+**Gemini/Google ecosystem:**
+1. **Gemini CLI** — Terminal-based agent with GEMINI.md project context
+2. **Firebase Studio** — Full-stack app builder with Gemini integration
+3. **AI Studio** — Playground for testing prompts and building with Gemini API
 
 ### Best for Beginners
 
@@ -166,4 +183,4 @@ Modern infrastructure for shipping your apps - databases, hosting, edge function
 
 ---
 
-*Last updated: February 2026*
+*Last updated: February 22, 2026*
