@@ -30,7 +30,7 @@ src/
 │   │   └── beginners/        # Beginners Guide (ages 8-17, colorful gradient theme)
 │   ├── (app)/                # Main app pages (sidebar layout, auth-aware)
 │   │   ├── dashboard/        # Personal dashboard (favorites, bookmarks, notes, history)
-│   │   ├── learn/            # Learning hub (Big 3 AI, prompting, coding tools, models)
+│   │   ├── learn/            # Learning hub (Big 3 waterfall: Who/What/When/How, tools, prompting, daily digest)
 │   │   ├── cheatsheets/      # Cheat sheets (prompting templates, shortcuts, PTCF)
 │   │   ├── tools/            # AI tool directory (30+ tools, search, filter, compare)
 │   │   ├── project-tools/    # Tech stacks, kickoff prompts, vibe coding guide, project files
@@ -40,11 +40,12 @@ src/
 │   ├── (auth)/               # Auth pages (login, signup, signout)
 │   └── api/
 │       ├── cron/             # Scheduled jobs (news-sync)
-│       └── v1/               # REST API endpoints
+│       └── v1/               # REST API endpoints (tools, news, digest, user)
 ├── components/
 │   ├── ui/                   # shadcn/ui components + custom (copy-button, etc.)
 │   ├── layout/               # Header, sidebar, mobile-nav, footer, logo, theme-toggle
 │   ├── tools/                # Tool cards, filters, ratings, comparison
+│   ├── learn/                # Learn page (guide-library, daily-digest)
 │   ├── news/                 # News feed components
 │   ├── workflows/            # Workflow components
 │   ├── dashboard/            # Dashboard widgets
