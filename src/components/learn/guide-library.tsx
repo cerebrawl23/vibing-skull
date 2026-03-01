@@ -11,10 +11,10 @@ import {
   Sparkles,
   ArrowRight,
   ExternalLink,
-  Zap,
   Lightbulb,
   Newspaper,
   Wrench,
+  Database,
 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -151,6 +151,82 @@ const tipsAndCases = [
     tools: ['Claude Code'],
   },
 ]
+
+// ---------------------------------------------------------------------------
+// PROMPT CACHING
+// ---------------------------------------------------------------------------
+const cachingFacts = [
+  { label: 'Cache reads cost', value: '10% of base', sub: '90% savings on repeated context' },
+  { label: 'Default TTL', value: '5 minutes', sub: 'refreshed free on each use' },
+  { label: 'Extended TTL', value: '1 hour', sub: '2× write price, still 90% read savings' },
+  { label: 'Max breakpoints', value: '4 per request', sub: 'explicit mode only' },
+]
+
+const cachingModels = [
+  { model: 'Sonnet 4.6', base: '$3', write5m: '$3.75', write1h: '$6', read: '$0.30' },
+  { model: 'Sonnet 4.5', base: '$3', write5m: '$3.75', write1h: '$6', read: '$0.30' },
+  { model: 'Haiku 4.5', base: '$1', write5m: '$1.25', write1h: '$2', read: '$0.10' },
+  { model: 'Opus 4.6', base: '$5', write5m: '$6.25', write1h: '$10', read: '$0.50' },
+]
+
+const automaticCacheCode = `import Anthropic from "@anthropic-ai/sdk"
+
+const client = new Anthropic()
+
+// Automatic caching — simplest approach
+// Applies cache breakpoint to the last cacheable block automatically
+const response = await client.messages.create({
+  model: "claude-sonnet-4-6",
+  max_tokens: 1024,
+  cache_control: { type: "ephemeral" },  // ← top-level, that's it
+  system: "You are a senior TypeScript developer. " +
+    "Project context: Next.js 16, Supabase, Tailwind CSS 4. " +
+    // ... your full CLAUDE.md contents here (1024+ tokens to be cacheable)
+    "Follow existing code patterns and naming conventions...",
+  messages: [{ role: "user", content: "Add a user settings page" }]
+})
+
+// Check if cache was used
+console.log(response.usage)
+// { cache_creation_input_tokens: 1850, cache_read_input_tokens: 0, ... } ← first call
+// { cache_creation_input_tokens: 0,    cache_read_input_tokens: 1850, ... } ← subsequent`
+
+const explicitCacheCode = `import Anthropic from "@anthropic-ai/sdk"
+
+const client = new Anthropic()
+
+// Explicit breakpoints — fine-grained control (up to 4 per request)
+const response = await client.messages.create({
+  model: "claude-sonnet-4-6",
+  max_tokens: 1024,
+  system: [
+    {
+      type: "text",
+      text: "You are a senior TypeScript developer...",
+    },
+    {
+      type: "text",
+      text: "## Project Context\\n\\n" + fullProjectDocs,  // large static block
+      cache_control: { type: "ephemeral" },  // ← breakpoint 1: cache everything above
+    },
+  ],
+  messages: [
+    {
+      role: "user",
+      content: [
+        {
+          type: "text",
+          text: referenceCodeFile,  // another large static block
+          cache_control: { type: "ephemeral" },  // ← breakpoint 2
+        },
+        { type: "text", text: "Refactor this to use the repository pattern" }
+      ]
+    }
+  ]
+})
+
+// Verify: both breakpoints should show cache_read_input_tokens on 2nd call
+console.log(response.usage.cache_read_input_tokens)  // > 0 means it worked`
 
 // ---------------------------------------------------------------------------
 // EXPANDABLE SECTION
@@ -343,7 +419,99 @@ export function GuideLibrary() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════════
-          SECTION 4: WHAT'S NEW — DAILY DIGEST
+          SECTION 4: PROMPT CACHING
+         ══════════════════════════════════════════════════════════════════════ */}
+      <section>
+        <div className="flex items-center gap-2 mb-2">
+          <Database className="h-5 w-5 text-primary" />
+          <h2 className="text-xl font-bold">Prompt Caching</h2>
+        </div>
+        <p className="text-sm text-muted-foreground mb-6">
+          Cache your system prompts and large context blocks — cache reads cost <strong>10% of base input price</strong>, a 90% saving on repeated context.
+        </p>
+
+        {/* Stat pills */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+          {cachingFacts.map((f) => (
+            <div key={f.label} className="rounded-lg border p-3 text-center">
+              <p className="text-lg font-bold text-primary">{f.value}</p>
+              <p className="text-xs font-medium">{f.label}</p>
+              <p className="text-[10px] text-muted-foreground">{f.sub}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Two modes */}
+        <div className="grid gap-4 md:grid-cols-2 mb-6">
+          <Card>
+            <CardContent className="pt-5 space-y-3">
+              <div>
+                <Badge variant="outline" className="text-[10px] mb-2 bg-green-500/10 text-green-600 border-green-500/20">Recommended</Badge>
+                <h3 className="font-semibold text-sm">Automatic Caching</h3>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Add one <code className="bg-muted px-1 rounded text-[11px]">cache_control</code> field at the top level of your request. The system automatically moves the breakpoint forward as conversation history grows. Best for multi-turn chats and Claude Code sessions.
+                </p>
+              </div>
+              <ExpandableSection label="Show code example" expandedLabel="Hide code">
+                <pre className="text-[11px] bg-muted/60 border rounded-md p-3 overflow-x-auto leading-relaxed font-mono whitespace-pre">
+                  {automaticCacheCode}
+                </pre>
+              </ExpandableSection>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="pt-5 space-y-3">
+              <div>
+                <Badge variant="outline" className="text-[10px] mb-2">Advanced</Badge>
+                <h3 className="font-semibold text-sm">Explicit Breakpoints</h3>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Place <code className="bg-muted px-1 rounded text-[11px]">cache_control</code> directly on individual content blocks. Supports up to 4 breakpoints per request — useful when you have multiple large static blocks (system prompt + tools + examples).
+                </p>
+              </div>
+              <ExpandableSection label="Show code example" expandedLabel="Hide code">
+                <pre className="text-[11px] bg-muted/60 border rounded-md p-3 overflow-x-auto leading-relaxed font-mono whitespace-pre">
+                  {explicitCacheCode}
+                </pre>
+              </ExpandableSection>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Pricing table */}
+        <ExpandableSection label="View pricing per model (per million tokens)" expandedLabel="Hide pricing">
+          <div className="overflow-x-auto mt-2">
+            <table className="w-full text-xs border rounded-lg overflow-hidden">
+              <thead className="bg-muted/50">
+                <tr>
+                  <th className="text-left py-2 px-3 font-semibold">Model</th>
+                  <th className="text-right py-2 px-3 font-semibold">Base input</th>
+                  <th className="text-right py-2 px-3 font-semibold">Cache write (5m)</th>
+                  <th className="text-right py-2 px-3 font-semibold">Cache write (1h)</th>
+                  <th className="text-right py-2 px-3 font-semibold text-green-600">Cache read</th>
+                </tr>
+              </thead>
+              <tbody>
+                {cachingModels.map((m, i) => (
+                  <tr key={m.model} className={i % 2 === 0 ? 'bg-background' : 'bg-muted/20'}>
+                    <td className="py-2 px-3 font-medium">{m.model}</td>
+                    <td className="py-2 px-3 text-right text-muted-foreground">{m.base}/MTok</td>
+                    <td className="py-2 px-3 text-right text-muted-foreground">{m.write5m}/MTok</td>
+                    <td className="py-2 px-3 text-right text-muted-foreground">{m.write1h}/MTok</td>
+                    <td className="py-2 px-3 text-right font-semibold text-green-600">{m.read}/MTok</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p className="text-[10px] text-muted-foreground mt-2">
+              Minimum 1,024 tokens required for a block to be cacheable. Cache read tokens are always 0.1× base input price.
+            </p>
+          </div>
+        </ExpandableSection>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          SECTION 5: WHAT'S NEW — DAILY DIGEST
          ══════════════════════════════════════════════════════════════════════ */}
       <section>
         <div className="flex items-center justify-between mb-6">
